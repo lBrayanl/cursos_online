@@ -77,7 +77,7 @@ class Login extends Component {
               onChange={this.handleChange}
             />
             <br />
-            <label>Contraseña: </label>
+            <label>Contrasena: </label>
             <br />
             <input
               type="password"
