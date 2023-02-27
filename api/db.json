@@ -1,0 +1,27 @@
+{
+
+    "usuarios":[
+        {
+            "id": 1,
+            "primer_apellido": "Perdomo",
+            "segundo_apellido": "Comba",
+            "primer_nombre": "Karen",
+            "segundo_nombre": "Alejandra",
+            "username": "kperdomo",
+            "password": "1eeba2ad632291d8e484a5e8fa3ab482" 
+        },
+        {
+            "id": 2,
+            "primer_apellido": "Perdomo",
+            "segundo_apellido": "Horta",
+            "primer_nombre": "Maria",
+            "segundo_nombre": "Ximena",
+            "username": "Mhorta.",
+            "password": "e10adc3949ba59abbe56e057f20f883e" 
+        }
+    ]
+
+    
+    
+    
+}
