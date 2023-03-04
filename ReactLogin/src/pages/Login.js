@@ -99,7 +99,7 @@ class Login extends Component {
         </div>
       </div>
         );
-        //prueba 1244e
+        //prueba Nicolas
     }
 }
 
