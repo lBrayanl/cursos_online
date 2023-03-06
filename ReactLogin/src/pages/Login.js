@@ -25,6 +25,11 @@ class Login extends Component {
         });
     }
 
+    crearUsuario = () => {
+        window.location.href="./formulario";
+    }
+
+
     iniciarSesion = async() =>{
         await axios.get(baseUrl, {params: {username: this.state.form.username, password: md5(this.state.form.password)}})
         .then(response=> {
@@ -77,7 +82,7 @@ class Login extends Component {
               onChange={this.handleChange}
             />
             <br />
-            <label>Contrasena: </label>
+            <label>Contrasea: </label>
             <br />
             <input
               type="password"
@@ -92,7 +97,7 @@ class Login extends Component {
           </div>
           <div className="other">
                 <button className="btn submits frgt-pass">Forgot Password</button>
-                <button className="btn submits sign-up">Sign Up 
+                <button className="btn submits frgt-pass" onClick={()=> this.crearUsuario()}>Crear Usuario
                 <i className="fa fa-user-plus" aria-hidden="true"></i>
                 </button>
             </div>
