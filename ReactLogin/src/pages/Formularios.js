@@ -1,173 +1,177 @@
-import styled, {css} from "styled-components";
+import React, {useState} from 'react';
+import { Formulario, Label, ContenerTerminos, ContenedorBotonCentrado, Boton, MensajeExito, MensajeError } from '../componentes/formVista'; 
+import {faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import Input from '../componentes/input';
 
-const colores = {
-    borde: "#0075FF",
-    error: "#bb2929",
-    exito: "#1ed12d"
-}
 
-const Formulario = styled.form`
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    
-    @media (max-width: 800px){
-        grid-template-columns: 1fr;
+
+const Formularios = () => {
+  const [usuario, cambiarUsuario] = useState({campo: '', valido: null});
+  const [nombre, cambiarNombre] = useState({campo: '', valido: null});
+  const [password, cambiarPassword] = useState({campo: '', valido: null});
+  const [password2, cambiarPassword2] = useState({campo: '', valido: null});
+  const [correo, cambiarCorreo] = useState({campo: '', valido: null});
+  const [telefono, cambiarTelefono] = useState({campo: '', valido: null});
+  const [terminos, cambiarTerminos] = useState(false);
+  const [formularioValido, cambiarFormularioValido] = useState(null);
+
+  const expresiones = {
+		usuario: /^[a-zA-Z0-9_-]{4,16}$/, // Letras, numeros, guion y guion_bajo
+		nombre: /^[a-zA-ZÀ-ÿ\s]{1,40}$/, // Letras y espacios, pueden llevar acentos.
+		password: /^.{4,12}$/, // 4 a 12 digitos.
+		correo: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
+		telefono: /^\d{7,14}$/ // 7 a 14 numeros.
+	}
+
+  const validarPassword2 = () =>{
+    if(password.campo.length > 0){
+      if(password.campo !== password2.campo){
+        cambiarPassword2((prevState) => {
+            return {...prevState, valido: 'false'}
+        });
+      } else {
+          cambiarPassword2((prevState) => {
+            return {...prevState, valido: 'true'}
+          });
+        }
     }
+      
+  }
 
+const onChangeTerminos = (e) => {
+    cambiarTerminos(e.target.checked);
 
-`;
-
-const Label = styled.label`
-    display: block;
-    font-weight: 700;
-    padding: 10px;
-    min-height: 40px;
-    cursor: pointer;
-
-    ${props => props.valido === 'false' && css`
-        color: ${colores.error};
-    `}
-`;
-
-const GrupoInput = styled.div`
-    position: relative;
-    z-index: 90;
-`;
-
-const Input = styled.input`
-    width: 100%;
-    background: #fff;
-    border-radius: 3px;
-    height: 45px;
-    line-height: 45px;
-    padding: 0 40px 0 10px;
-    transition: .3s ease all;
-    border: 3px solid transparent;
-
-    &:focus{
-        border: 3px solid ${colores.borde};
-        outline: none;
-        box-shadow: 3px 0px 30px rgba(163,163,163,0.4);
-    }
-
-    ${props => props.valido === 'true' && css`
-        border: 3px solid transparent;
-    `}
-    ${props => props.valido === 'false' && css`
-        border: 3px solid ${colores.error} !important;
-    `}
-
-`;
-
-const LeyendaError = styled.p`
-    font-size: 12px;
-    margin-bottom: 0;
-    color: ${colores.error};
-    display: none;
-
-    ${props => props.valido === 'true' && css`
-        display: none;    
-    `}
-
-    ${props => props.valido === 'false' && css`
-        display: block;
-    `}
-`;
-
-const IconoValidacion = styled(FontAwesomeIcon)`
-    position: absolute;
-    right: 10px;
-    bottom: 14px;
-    z-index: 100;
-    font-size: 16px;
-    opacity: 0; 
-
-    ${props => props.valido === 'false' && css`
-        opacity: 1;
-        color: ${colores.error};
-    `}
-
-    ${props => props.valido === 'true' && css`
-        opacity: 1;
-        color: ${colores.exito};
-    `}
-
-`;
-
-const ContenerTerminos = styled.div`
-
-    grid-column: span 2;
-
-    input {
-    margin-right: 10px;
 }
 
-@media (max-width: 800px){
-    grid-column: span 1;
+const onSubmit = (e) => {
+    e.preventDefault();
+
+    if(
+        usuario.valido === 'true' &&
+        nombre.valido === 'true' &&
+        password.valido === 'true' &&
+        password2.valido === 'true' &&
+        correo.valido === 'true' &&
+        telefono.valido === 'true' &&
+        terminos
+      ){
+            cambiarFormularioValido(true);
+            cambiarUsuario({campo: '', valido: ''});
+            cambiarNombre({campo: '', valido: null});
+            cambiarPassword({campo: '', valido: null});
+            cambiarPassword2({campo: '', valido: 'null'});
+            cambiarCorreo({campo: '', valido: null});
+            cambiarTelefono({campo: '', valido: null});
+            
+          }else{
+            cambiarFormularioValido(false);
+          }
+      }
+
+
+
+return (
+  <div className="containerPrincipal">
+    <main>
+      <Formulario action="" onSubmit={onSubmit} >
+          <Input
+            estado={usuario}
+            cambiarEstado={cambiarUsuario}
+            tipo="text"
+            label="Usuario"
+            placeholder="Introduce tu nombre"
+            name="usuario"
+            leyendaError="El usuario tiene que ser de 4 a 16 digitos y solo puede contener numeros, letras y guion bajo"
+            expresionRegular={expresiones.usuario}
+          />
+
+          <Input
+            estado={nombre}
+            cambiarEstado={cambiarNombre}
+            tipo="text"
+            label="Nombre"
+            placeholder="Introduce tu nombre"
+            name="nombre1"
+            leyendaError="El usuario tiene que ser de 4 a 16 digitos y solo puede contener numeros, letras y guion bajo"
+            expresionRegular={expresiones.nombre}
+          />  
+
+          <Input
+            estado={password}
+            cambiarEstado={cambiarPassword}
+            tipo="password"
+            label="Contraseña"
+            placeholder="Introduce una contraseña"
+            name="password1"
+            leyendaError="El usuario tiene que ser de 4 a 16 digitos y solo puede contener numeros, letras y guion bajo"
+            expresionRegular={expresiones.password}
+          />
+          
+          <Input
+            estado={password2}
+            cambiarEstado={cambiarPassword2}
+            tipo="password"
+            label="Repetir contraseña"
+            placeholder="Escribe la contraseña"
+            name="password2"
+            leyendaError="Ambas contraseñas deben coincidir"
+            funcion={validarPassword2}
+          />
+
+          <Input
+            estado={correo}
+            cambiarEstado={cambiarCorreo}
+            tipo="email"
+            label="Correo"
+            placeholder="Introduce tu correo"
+            name="email"
+            leyendaError="Correo invalido"
+            expresionRegular={expresiones.correo}
+          />
+          
+          <Input
+            estado={telefono}
+            cambiarEstado={cambiarTelefono}
+            tipo="text"
+            label="Telefono"
+            placeholder="Introduce tu telefono"
+            name="telefono"
+            leyendaError="Este campo solo debe tener numeros y maximo 10 numeros"
+            expresionRegular={expresiones.telefono}
+          />
+          
+        
+        <ContenerTerminos>
+          <Label>
+            <input 
+              type="checkbox" 
+              name="terminos" 
+              id="terminos" 
+              checked={terminos}
+              onChange={onChangeTerminos}
+            />
+              Acepto los Terminos y Condiciones
+          </Label>  
+        </ContenerTerminos>
+
+          {formularioValido === false && <MensajeError>
+              <p>
+                <FontAwesomeIcon icon={faExclamationTriangle}/>
+                <b>Error:</b> Por favor rellena el formulario correctamente.
+              </p>
+          </MensajeError>}
+
+        <ContenedorBotonCentrado>
+            <Boton type="submit">Enviar</Boton>
+            {formularioValido === true && <MensajeExito>Formulario enviado exitosamente.</MensajeExito>}
+        </ContenedorBotonCentrado>
+
+      </Formulario>
+    </main>
+    </div>
+ );
+
 }
-`;
 
-const ContenedorBotonCentrado = styled.div`a
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    grid-column: span 2;
-
-    @media (max-width: 800px){
-    grid-column: span 1;
-}
-`;
-
-const Boton = styled.button`
-    height: 45px;
-    line-height: 45px;
-    width: 30%;
-    background: #000;
-    color: #fff;
-    font-weight: bold;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-    transition: .1s ease all;
-
-    &:hover {
-    box-shadow: 3px 0px 30px rgba(163,163,163, 1);
-}
-`;
-
-const MensajeExito = styled.p`
-    font-size: 14px;
-    color: ${colores.exito};
-
-`;
-
-const MensajeError = styled.div`
-    height: 45px;
-    line-height: 45px;
-    background: #F66060;
-    padding: 0px 15px;
-    border-radius: 3px;
-    grid-column: span 2;
-    p {
-    margin: 0;
-    } 
-    b {
-    margin-left: 10px;
-    }
-`;
- 
-export{ Formulario, 
-        Label,
-        GrupoInput,
-        Input,
-        LeyendaError,
-        IconoValidacion,
-        ContenerTerminos,
-        ContenedorBotonCentrado,
-        Boton,
-        MensajeExito,
-        MensajeError
-    
-    };
+export default Formularios;
